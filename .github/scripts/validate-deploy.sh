@@ -4,6 +4,11 @@ GIT_REPO=$(cat git_repo)
 GIT_TOKEN=$(cat git_token)
 
 export KUBECONFIG=$(cat .kubeconfig)
+NAMESPACE=$(cat .namespace)
+BRANCH="main"
+SERVER_NAME="default"
+TYPE="operators"
+COMPONENT_NAME="ibm-cp4s-operator"
 
 mkdir -p .testrepo
 
@@ -15,11 +20,6 @@ find . -name "*"
 
 ## **** Operator
 
-NAMESPACE=$(cat .namespace)
-BRANCH="main"
-SERVER_NAME="default"
-TYPE="operators"
-COMPONENT_NAME="ibm-cp4s-operator"
 
 if [[ ! -f "argocd/2-services/cluster/${SERVER_NAME}/${TYPE}/${NAMESPACE}-${COMPONENT_NAME}.yaml" ]]; then
   echo "ArgoCD config missing - argocd/2-services/cluster/${SERVER_NAME}/${TYPE}/${NAMESPACE}-${COMPONENT_NAME}.yaml"
