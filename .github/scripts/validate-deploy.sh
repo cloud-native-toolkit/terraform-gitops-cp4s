@@ -55,7 +55,7 @@ fi
 
 SUBSCRIPTION="subscription/ibm-cp-security-operator"
 count=0
-until kubectl get "${SUBSCRIPTION}" -n "${NAMESPACE}" || [[ $count -eq 20 ]]; do
+until kubectl get "${SUBSCRIPTION}" -n "${NAMESPACE}" || [[ $count -eq 30 ]]; do
   echo "Waiting for ${SUBSCRIPTION} in ${NAMESPACE}"
   count=$((count + 1))
   sleep 15
@@ -112,7 +112,7 @@ INSTANCE_NAME="threatmgmt"
 CR="CP4SThreatManagement/${INSTANCE_NAME}"
 
 count=0
-until kubectl get "${CR}" -n "${NAMESPACE}" || [[ $count -eq 20 ]]; do
+until kubectl get "${CR}" -n "${NAMESPACE}" || [[ $count -eq 30 ]]; do
   echo "Waiting for ${CR} in ${NAMESPACE}"
   count=$((count + 1))
   sleep 15
