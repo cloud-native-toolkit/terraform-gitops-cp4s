@@ -69,7 +69,7 @@ fi
 
 CSV="ibm-cp-security-operator"
 count=0
-until [[ $(kubectl get csv -n "${NAMESPACE}" -l operators.coreos.com/${CSV}.${NAMESPACE}="" -o=jsonpath='{range .items[]}{.metadata.name}{"\n"}{end}' | wc -l) -gt 0 ]] || [[ $count -eq 40 ]]; do
+until [[ $(kubectl get csv -n "${NAMESPACE}" -l "operators.coreos.com/${CSV}.${NAMESPACE}" ]] || [[ $count -eq 40 ]]; do
   echo "Waiting for csv ${CSV} in ${NAMESPACE}"
   count=$((count + 1))
   sleep 15
@@ -82,11 +82,10 @@ if [[ $count -eq 40 ]]; then
 fi
 
 echo "Found CSV"
-kubectl get csv -n "${NAMESPACE}" -l operators.coreos.com/${CSV}.${NAMESPACE}="" -o=jsonpath='{range .items[]}{.metadata.name}{"\n"}{end}'
+kubectl get csv -n "${NAMESPACE}" -l "operators.coreos.com/${CSV}.${NAMESPACE}"
 
 ## ***** Instance
 
-export NAMESPACE=$(cat .namespace)
 BRANCH="main"
 SERVER_NAME="default"
 TYPE="instances"

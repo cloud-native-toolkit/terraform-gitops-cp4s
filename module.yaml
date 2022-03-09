@@ -1,6 +1,6 @@
-name: ""
+name: "gitops-cp4s"
 type: gitops
-description: ""
+description: "Module to populate a gitops repo with the resources to provision IBM Cloud Pak for Security"
 tags:
   - tools
   - gitops
@@ -47,3 +47,4 @@ versions:
         moduleRef:
           id: catalogs
           output: catalog_ibmoperators
+softwareProvider: ibm-cp
