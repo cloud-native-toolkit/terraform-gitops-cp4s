@@ -79,10 +79,10 @@ if [[ $count -eq 40 ]]; then
   echo "Timed out waiting for ${CSV} in ${NAMESPACE}"
   kubectl get csv -n "${NAMESPACE}"
   exit 1
+else
+  echo "Found CSV"
+  kubectl get csv -n "${NAMESPACE}" -l "operators.coreos.com/${CSV}.${NAMESPACE}"
 fi
-
-echo "Found CSV"
-kubectl get csv -n "${NAMESPACE}" -l "operators.coreos.com/${CSV}.${NAMESPACE}"
 
 ## ***** Instance
 
@@ -121,6 +121,8 @@ if [[ $count -eq 30 ]]; then
   echo "Timed out waiting for ${CR} in ${NAMESPACE}"
   kubectl get CP4SThreatManagement -n "${NAMESPACE}"
   exit 1
+else
+  echo "Found ${CR} in ${NAMESPACE}"
 fi
 
 cd ..
