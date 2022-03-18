@@ -8,4 +8,5 @@ module "cp4s" {
   catalog = module.cp_catalogs.catalog_ibmoperators
   kubeseal_cert = module.gitops.sealed_secrets_cert
   entitlement_key = var.cp_entitlement_key
+  backup_storage_size = var.backup_storage_size
 }

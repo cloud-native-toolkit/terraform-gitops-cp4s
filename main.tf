@@ -25,13 +25,13 @@ locals {
       acceptLicense = true
       basicDeploymentConfiguration = {
         adminUser = var.admin_user
-        domain = ""
-        storageClass = var.storageclass
+        domain = var.domain
+        storageClass = var.storage_class
       }
       extendedDeploymentConfiguration = {
         airgapInstall = false
-        backupStorageClass = ""
-        backupStorageSize = ""
+        backupStorageClass = var.backup_storage_class
+        backupStorageSize = var.backup_storage_size
         imagePullPolicy = "Always"
         repository = "cp.icr.io/cp/cp4s"
         repositoryType = "entitled"

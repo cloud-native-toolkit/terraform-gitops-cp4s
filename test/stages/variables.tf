@@ -76,3 +76,7 @@ variable "kubeseal_namespace" {
 
 variable "cp_entitlement_key" {
 }
+
+variable "backup_storage_size" {
+  default = "2Gi"
+}

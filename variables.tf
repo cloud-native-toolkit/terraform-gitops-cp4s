@@ -86,9 +86,9 @@ variable "channel" {
   default = "v1.9"
 }
 
-variable "storageclass" {
+variable "storage_class" {
   type = string
-  description = "Storage class name for block storage, if left blank default storage class will be taken."
+  description = "The provisioned block or file storage class for all the PVCs required by Cloud Pak for Security. When it is not specified, the default storage class is used."
   default = ""
 }
 
@@ -119,4 +119,22 @@ variable "catalog_namespace" {
   type        = string
   description = "The namespace where the catalog has been deployed"
   default     = "openshift-marketplace"
+}
+
+variable "backup_storage_size" {
+  type = string
+  description = "The storage size for the backup and restore PVC. Must be 500Gi or higher."
+  default = ""
+}
+
+variable "backup_storage_class" {
+  type = string
+  description = "Storage class for the backup and restore pod. If this value is not set, Cloud Pak for Security takes the value from the storageClass parameter."
+  default = ""
+}
+
+variable "domain" {
+  type = string
+  description = "The fully qualified domain name (FQDN) created for Cloud Pak for Security. If you don't specify an FQDN, it is generated as cp4s.<cluster_ingress_subdomain>."
+  default = ""
 }
