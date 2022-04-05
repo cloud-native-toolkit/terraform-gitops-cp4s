@@ -84,5 +84,5 @@ variable "backup_storage_size" {
 
 variable "cp4s_admin_user" {
   type = string
-  default = "dimallya@in.ibm.com"
+  default = "admin@xyz.com"
 }
