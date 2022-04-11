@@ -34,7 +34,7 @@ module "cp4s" {
   namespace = module.gitops_namespace.name
   catalog = module.cp_catalogs.catalog_ibmoperators
   kubeseal_cert = module.gitops.sealed_secrets_cert
-  entitlement_key = var.cp_entitlement_key
+  entitlement_key = module.cp_catalogs.entitlement_key
   admin_user  = var.cp4s_admin_user
 }
 ```
