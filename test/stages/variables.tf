@@ -78,5 +78,11 @@ variable "cp_entitlement_key" {
 }
 
 variable "backup_storage_size" {
+  type = string
   default = "2Gi"
+}
+
+variable "cp4s_admin_user" {
+  type = string
+  default = "admin@xyz.com"
 }

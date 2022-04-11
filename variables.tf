@@ -106,7 +106,6 @@ variable "entitlement_key" {
 variable "admin_user" {
   type = string
   description = "Short name or email-id of the user to be given administrator privileges in the default account. Mandatory value while creating cp4s-threat-management-instance"
-  default = "admin"
 }
 
 variable "catalog" {
@@ -123,7 +122,7 @@ variable "catalog_namespace" {
 
 variable "backup_storage_size" {
   type = string
-  description = "The storage size for the backup and restore PVC. Must be 500Gi or higher."
+  description = "The storage size for the backup and restore PVC. Must be 500Gi or higher. If not specified, by default 500Gi is reserved."
   default = ""
 }
 
