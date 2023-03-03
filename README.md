@@ -6,6 +6,12 @@ Module to populate a gitops repository with the resources to deploy IBM Cloud Pa
 
 The module depends on the following software components:
 
+- https://github.com/cloud-native-toolkit/terraform-tools-gitops
+- https://github.com/cloud-native-toolkit/terraform-gitops-namespace
+- https://github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs
+- https://github.com/cloud-native-toolkit/terraform-gitops-serverless-operator
+- https://github.com/cloud-native-toolkit/terraform-gitops-knative-serving
+
 ### Command-line tools
 
 - terraform >= v0.15

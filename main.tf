@@ -9,38 +9,42 @@ locals {
   instance_yaml_dir          = "${path.cwd}/.tmp/${local.name}/chart/${local.instance_name}"
   service_url   = "http://${local.name}.${var.namespace}"
   subscription_values_content = {
-    cp4s = {
-      cps_namespace        = var.namespace
-      cps_platform_channel = var.channel
-      catalogsource = var.catalog
-      catalogsource_namespace = var.catalog_namespace
+    ibm-cp4s-operator = {
+      cp4s = {
+        cps_namespace        = var.namespace
+        cps_platform_channel = var.channel
+        catalogsource = var.catalog
+        catalogsource_namespace = var.catalog_namespace
+      }
     }
   }
   instance_values_content = {
-    metadata = {
-      name = "threatmgmt"
-      namespace = var.namespace
-    } 
-    spec = {
-      acceptLicense = true
-      basicDeploymentConfiguration = {
-        adminUser = var.admin_user
-        domain = var.domain
-        storageClass = var.storage_class
-      }
-      extendedDeploymentConfiguration = {
-        airgapInstall = false
-        backupStorageClass = var.backup_storage_class
-        backupStorageSize = var.backup_storage_size
-        imagePullPolicy = "Always"
-        repository = "cp.icr.io/cp/cp4s"
-        repositoryType = "entitled"
-        roksAuthentication = var.roks_auth
-      }
-      threatManagementCapabilities = {
-        deployDRC = true
-        deployRiskManager = true
-        deployThreatInvestigator = true  
+    ibm-cp4s-threatmgmt-instance = {
+      metadata = {
+        name = "threatmgmt"
+        namespace = var.namespace
+      } 
+      spec = {
+        acceptLicense = true
+        basicDeploymentConfiguration = {
+          adminUser = var.admin_user
+          domain = var.domain
+          storageClass = var.storage_class
+        }
+        extendedDeploymentConfiguration = {
+          airgapInstall = false
+          backupStorageClass = var.backup_storage_class
+          backupStorageSize = var.backup_storage_size
+          imagePullPolicy = "Always"
+          repository = "cp.icr.io/cp/cp4s"
+          repositoryType = "entitled"
+          roksAuthentication = var.roks_auth
+        }
+        threatManagementCapabilities = {
+          deployDRC = true
+          deployRiskManager = true
+          deployThreatInvestigator = true  
+        }
       }
     }
   }

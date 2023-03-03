@@ -22,6 +22,14 @@ versions:
         refs:
           - source: github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs.git
             version: ">= 1.0.0"
+      - id: serverless-operator
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-gitops-serverless-operator.git
+            version: '>= 1.0.0'
+      - id: knative-serving
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-gitops-knative-serving.git
+            version: '>= 1.0.0'
     variables:
       - name: gitops_config
         moduleRef:
