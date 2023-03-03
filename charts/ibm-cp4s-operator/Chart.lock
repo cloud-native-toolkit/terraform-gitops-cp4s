@@ -1,0 +1,6 @@
+dependencies:
+- name: ibm-cp4s-operator
+  repository: https://charts.cloudnativetoolkit.dev/
+  version: 1.0.0
+digest: sha256:00e53b2ea877522d13632475e7fb93a844579b08650cba56a9fd2b79ebe736b4
+generated: "2023-03-03T16:09:17.280315-05:00"

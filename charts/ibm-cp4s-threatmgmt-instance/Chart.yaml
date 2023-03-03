@@ -1,7 +1,7 @@
 apiVersion: v2
 appVersion: 1.16.0
 description: A Helm chart for Kubernetes to deploy the CP4S Threat Management instance
-name: ibm-cp4sthreatmanagements-instance
+name: ibm-cp4s-threatmgmt-instance
 type: application
 version: 1.0.0
 

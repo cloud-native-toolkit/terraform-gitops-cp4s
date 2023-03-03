@@ -1,0 +1,6 @@
+dependencies:
+- name: ibm-cp4s-threatmgmt-instance
+  repository: https://charts.cloudnativetoolkit.dev/
+  version: 1.0.0
+digest: sha256:dc3395780b38283f467e26e8b50527fc798bf70428e6ac958f21bbeda3c45e2e
+generated: "2023-03-03T16:21:27.357682-05:00"
