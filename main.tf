@@ -76,7 +76,7 @@ resource gitops_module setup_subscription_gitops {
   content_dir = local.subscription_yaml_dir
   server_name = var.server_name
   layer = local.layer
-  type = "operators"
+  type = "base"
   branch = local.application_branch
   config = yamlencode(var.gitops_config)
   credentials = yamlencode(var.git_credentials)
@@ -118,7 +118,7 @@ resource gitops_module setup_instance_gitops {
   content_dir = local.instance_yaml_dir
   server_name = var.server_name
   layer = local.layer
-  type = "instances"
+  type = "base"
   branch = local.application_branch
   config = yamlencode(var.gitops_config)
   credentials = yamlencode(var.git_credentials)
