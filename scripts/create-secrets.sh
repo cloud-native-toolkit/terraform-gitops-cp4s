@@ -11,7 +11,7 @@ if ! command -v kubectl 1> /dev/null 2> /dev/null; then
   exit 1
 fi
 
-mkdir -p "${DEST_DIR}"
+mkdir -p "${DEST_DIR}"/templates
 
 if [[ -z "${LICENSE}" ]] ||  [[ -z "${LICENSE_KEY}" ]]; then
   echo "LICENSE and LICENSE_KEY are required as environment variables"
@@ -22,4 +22,4 @@ kubectl create secret generic "${SECRET_NAME}" \
   --from-literal="${LICENSE_KEY}=${LICENSE}" \
   -n "${NAMESPACE}" \
   --dry-run=client \
-  --output=yaml > "${DEST_DIR}/${SECRET_NAME}.yaml"
+  --output=yaml > "${DEST_DIR}/templates/${SECRET_NAME}.yaml"
