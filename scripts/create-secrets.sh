@@ -19,7 +19,7 @@ if [[ -z "${LICENSE}" ]] ||  [[ -z "${LICENSE_KEY}" ]]; then
 fi
 
 kubectl create secret generic "${SECRET_NAME}" \
-  --from-literal=${LICENSE_KEY}=${LICENSE}" \
+  --from-literal="${LICENSE_KEY}=${LICENSE}" \
   -n "${NAMESPACE}" \
   --dry-run=client \
   --output=yaml > "${DEST_DIR}/${SECRET_NAME}.yaml"
