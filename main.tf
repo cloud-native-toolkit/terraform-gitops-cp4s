@@ -97,7 +97,7 @@ module pull_secret {
 }
 
 resource null_resource create_instance_yaml {
-  depends_on = [null_resource.setup_subscription_gitops]
+  depends_on = [gitops_module.setup_subscription_gitops]
   provisioner "local-exec" {
     command = "${path.module}/scripts/create-yaml.sh '${local.instance_name}' '${local.instance_chart_dir}' '${local.instance_yaml_dir}'"
 
