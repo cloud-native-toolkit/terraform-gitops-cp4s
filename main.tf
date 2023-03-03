@@ -2,7 +2,6 @@ locals {
   name = "cp4s"
   subscription_name          = "ibm-cp4s-operator"
   instance_name              = "ibm-cp4s-threatmgmt-instance"
-  bin_dir       = module.setup_clis.bin_dir
   subscription_chart_dir = "${path.module}/charts/ibm-cp4s-operator"
   subscription_yaml_dir      = "${path.cwd}/.tmp/${local.name}/chart/${local.subscription_name}"
   instance_chart_dir = "${path.module}/charts/ibm-cp4s-threatmgmt-instance"
@@ -58,9 +57,6 @@ locals {
   layer_config = var.gitops_config[local.layer]
 }
 
-module setup_clis {
-  source = "github.com/cloud-native-toolkit/terraform-util-clis.git"
-}
 
 resource null_resource create_subscription_yaml {
   provisioner "local-exec" {
@@ -72,39 +68,18 @@ resource null_resource create_subscription_yaml {
   }
 }
 
-resource null_resource setup_subscription_gitops {
+resource gitops_module setup_subscription_gitops {
   depends_on = [null_resource.create_subscription_yaml]
 
-  triggers = {
-    name = local.subscription_name
-    namespace = var.namespace
-    yaml_dir = local.subscription_yaml_dir
-    server_name = var.server_name
-    layer = local.layer
-    type = "operators"
-    git_credentials = yamlencode(var.git_credentials)
-    gitops_config   = yamlencode(var.gitops_config)
-    bin_dir = local.bin_dir
-  }
-
-  provisioner "local-exec" {
-    command = "${self.triggers.bin_dir}/igc gitops-module '${self.triggers.name}' -n '${self.triggers.namespace}' --contentDir '${self.triggers.yaml_dir}' --serverName '${self.triggers.server_name}' -l '${self.triggers.layer}' --type '${self.triggers.type}'"
-
-    environment = {
-      GIT_CREDENTIALS = nonsensitive(self.triggers.git_credentials)
-      GITOPS_CONFIG   = self.triggers.gitops_config
-    }
-  }
-
-  provisioner "local-exec" {
-    when = destroy
-    command = "${self.triggers.bin_dir}/igc gitops-module '${self.triggers.name}' -n '${self.triggers.namespace}' --delete --contentDir '${self.triggers.yaml_dir}' --serverName '${self.triggers.server_name}' -l '${self.triggers.layer}' --type '${self.triggers.type}'"
-
-    environment = {
-      GIT_CREDENTIALS = nonsensitive(self.triggers.git_credentials)
-      GITOPS_CONFIG   = self.triggers.gitops_config
-    }
-  }
+  name = local.subscription_name
+  namespace = var.namespace
+  content_dir = local.subscription_yaml_dir
+  server_name = var.server_name
+  layer = local.layer
+  type = "operators"
+  branch = local.application_branch
+  config = yamlencode(var.gitops_config)
+  credentials = yamlencode(var.git_credentials)
 }
 
 module pull_secret {
@@ -132,42 +107,21 @@ resource null_resource create_instance_yaml {
   }
 }
 
-resource null_resource setup_instance_gitops {
+resource gitops_module setup_instance_gitops {
   depends_on = [
     null_resource.create_instance_yaml,
     module.seal_secrets
   ]
 
-  triggers = {
-    bin_dir = local.bin_dir
-    name = local.instance_name
-    namespace = var.namespace
-    yaml_dir = local.instance_yaml_dir
-    server_name = var.server_name
-    layer = local.layer
-    type = "instances"
-    git_credentials = yamlencode(var.git_credentials)
-    gitops_config   = yamlencode(var.gitops_config)
-  }
-
-  provisioner "local-exec" {
-    command = "${self.triggers.bin_dir}/igc gitops-module '${self.triggers.name}' -n '${self.triggers.namespace}' --contentDir '${self.triggers.yaml_dir}' --serverName '${self.triggers.server_name}' -l '${self.triggers.layer}' --type=${self.triggers.type} "
-
-    environment = {
-      GIT_CREDENTIALS = nonsensitive(self.triggers.git_credentials)
-      GITOPS_CONFIG   = self.triggers.gitops_config
-    }
-  }
-
-  provisioner "local-exec" {
-    when = destroy
-    command = "${self.triggers.bin_dir}/igc gitops-module '${self.triggers.name}' -n '${self.triggers.namespace}' --delete --contentDir '${self.triggers.yaml_dir}' --serverName '${self.triggers.server_name}' -l '${self.triggers.layer}' --type '${self.triggers.type}'"
-
-    environment = {
-      GIT_CREDENTIALS = nonsensitive(self.triggers.git_credentials)
-      GITOPS_CONFIG   = self.triggers.gitops_config
-    }
-  }
+  name = local.instance_name
+  namespace = var.namespace
+  content_dir = local.instance_yaml_dir
+  server_name = var.server_name
+  layer = local.layer
+  type = "instances"
+  branch = local.application_branch
+  config = yamlencode(var.gitops_config)
+  credentials = yamlencode(var.git_credentials)
 }
 
 resource null_resource create_secrets_yaml {
@@ -176,7 +130,6 @@ resource null_resource create_secrets_yaml {
     command = "${path.module}/scripts/create-secrets.sh '${var.namespace}' '${local.secret_name}' '${local.secrets_dir}'"
 
     environment = {
-      BIN_DIR = module.setup_clis.bin_dir
       LICENSE = var.orchestration_automation_license
       LICENSE_KEY = local.license_key
     }

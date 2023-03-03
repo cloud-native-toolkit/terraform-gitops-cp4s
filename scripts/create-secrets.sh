@@ -4,7 +4,7 @@ NAMESPACE="$1"
 SECRET_NAME="$2"
 DEST_DIR="$3"
 
-export PATH="${BIN_DIR}:${PATH}"
+#export PATH="${BIN_DIR}:${PATH}"
 
 if ! command -v kubectl 1> /dev/null 2> /dev/null; then
   echo "kubectl cli not found" >&2
