@@ -6,7 +6,10 @@ locals {
   subscription_chart_dir = "${path.module}/charts/ibm-cp4s-operator"
   subscription_yaml_dir      = "${path.cwd}/.tmp/${local.name}/chart/${local.subscription_name}"
   instance_chart_dir = "${path.module}/charts/ibm-cp4s-threatmgmt-instance"
-  instance_yaml_dir          = "${path.cwd}/.tmp/${local.name}/chart/${local.instance_name}"
+  license_key         = "license.key"
+  secret_name         = "isc-cases-customer-license"
+  secrets_dir         = "${path.cwd}/.tmp/${local.name}/secrets"
+  instance_yaml_dir   = "${path.cwd}/.tmp/${local.name}/chart/${local.instance_name}"
   service_url   = "http://${local.name}.${var.namespace}"
   subscription_values_content = {
     ibm-cp4s-operator = {
@@ -130,7 +133,10 @@ resource null_resource create_instance_yaml {
 }
 
 resource null_resource setup_instance_gitops {
-  depends_on = [null_resource.create_instance_yaml]
+  depends_on = [
+    null_resource.create_instance_yaml,
+    module.seal_secrets
+  ]
 
   triggers = {
     bin_dir = local.bin_dir
@@ -162,4 +168,29 @@ resource null_resource setup_instance_gitops {
       GITOPS_CONFIG   = self.triggers.gitops_config
     }
   }
+}
+
+resource null_resource create_secrets_yaml {
+
+  provisioner "local-exec" {
+    command = "${path.module}/scripts/create-secrets.sh '${var.namespace}' '${local.secret_name}' '${local.secrets_dir}'"
+
+    environment = {
+      BIN_DIR = module.setup_clis.bin_dir
+      LICENSE = var.orchestration_automation_license
+      LICENSE_KEY = local.license_key
+    }
+  }
+}
+
+
+module seal_secrets {
+  depends_on = [null_resource.create_secrets_yaml]
+
+  source = "github.com/cloud-native-toolkit/terraform-util-seal-secrets.git"
+
+  source_dir    = local.secrets_dir
+  dest_dir      = local.instance_yaml_dir
+  kubeseal_cert = var.kubeseal_cert
+  label         = local.secret_name
 }

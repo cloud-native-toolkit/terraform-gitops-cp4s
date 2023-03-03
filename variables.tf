@@ -137,3 +137,9 @@ variable "domain" {
   description = "The fully qualified domain name (FQDN) created for Cloud Pak for Security. If you don't specify an FQDN, it is generated as cp4s.<cluster_ingress_subdomain>."
   default = ""
 }
+
+variable "orchestration_automation_license" {
+  type = string
+  description = "Orchestration & Automation license."
+  default = ""
+}
