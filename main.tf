@@ -13,8 +13,8 @@ locals {
   subscription_values_content = {
     ibm-cp4s-operator = {
       cp4s = {
-        cps_namespace        = var.namespace
-        cps_platform_channel = var.channel
+        cp4s_namespace        = var.namespace
+        cp4s_platform_channel = var.channel
         catalogsource = var.catalog
         catalogsource_namespace = var.catalog_namespace
       }
