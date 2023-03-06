@@ -76,7 +76,7 @@ resource gitops_module setup_subscription_gitops {
   content_dir = local.subscription_yaml_dir
   server_name = var.server_name
   layer = local.layer
-  type = "base"
+  type = "operators"
   branch = local.application_branch
   config = yamlencode(var.gitops_config)
   credentials = yamlencode(var.git_credentials)
@@ -109,7 +109,6 @@ resource null_resource create_instance_yaml {
 
 resource gitops_module setup_instance_gitops {
   depends_on = [
-    null_resource.create_instance_yaml,
     module.seal_secrets
   ]
 
@@ -118,13 +117,17 @@ resource gitops_module setup_instance_gitops {
   content_dir = local.instance_yaml_dir
   server_name = var.server_name
   layer = local.layer
-  type = "base"
+  type = "instances"
   branch = local.application_branch
   config = yamlencode(var.gitops_config)
   credentials = yamlencode(var.git_credentials)
 }
 
 resource null_resource create_secrets_yaml {
+
+  depends_on = [
+    null_resource.create_instance_yaml,
+  ]
 
   provisioner "local-exec" {
     command = "${path.module}/scripts/create-secrets.sh '${var.namespace}' '${local.secret_name}' '${local.secrets_dir}'"
@@ -143,7 +146,7 @@ module seal_secrets {
   source = "github.com/cloud-native-toolkit/terraform-util-seal-secrets.git"
 
   source_dir    = local.secrets_dir
-  dest_dir      = local.instance_yaml_dir
+  dest_dir      = "${local.instance_yaml_dir}/templates"
   kubeseal_cert = var.kubeseal_cert
   label         = local.secret_name
 }
