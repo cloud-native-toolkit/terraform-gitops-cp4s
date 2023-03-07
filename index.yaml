@@ -187,6 +187,201 @@ versions:
       - name: orchestration_automation_license
         type: string
         description: Orchestration & Automation license.
+        default: orchestration_automation_license
+    version: v1.1.3
+    outputs:
+      - name: name
+        description: The name of the module
+      - name: branch
+        description: The branch where the module config has been placed
+      - name: namespace
+        description: The namespace where the module will be deployed
+      - name: server_name
+        description: The server where the module will be deployed
+      - name: layer
+        description: The layer where the module is deployed
+      - name: type
+        description: The type of module where the module is deployed
+  - platforms:
+      - kubernetes
+      - ocp3
+      - ocp4
+    providers:
+      - name: gitops
+        source: cloud-native-toolkit/gitops
+    dependencies:
+      - id: gitops
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-tools-gitops.git
+            version: '>= 1.1.0'
+      - id: namespace
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-gitops-namespace.git
+            version: '>= 1.0.0'
+      - id: catalogs
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs.git
+            version: '>= 1.0.0'
+      - id: serverless-operator
+        refs:
+          - source: >-
+              github.com/cloud-native-toolkit/terraform-gitops-serverless-operator.git
+            version: '>= 1.0.0'
+      - id: knative-serving
+        refs:
+          - source: >-
+              github.com/cloud-native-toolkit/terraform-gitops-knative-serving.git
+            version: '>= 1.0.0'
+    variables:
+      - name: gitops_config
+        type: |-
+          object({
+              boostrap = object({
+                argocd-config = object({
+                  project = string
+                  repo = string
+                  url = string
+                  path = string
+                })
+              })
+              infrastructure = object({
+                argocd-config = object({
+                  project = string
+                  repo = string
+                  url = string
+                  path = string
+                })
+                payload = object({
+                  repo = string
+                  url = string
+                  path = string
+                })
+              })
+              services = object({
+                argocd-config = object({
+                  project = string
+                  repo = string
+                  url = string
+                  path = string
+                })
+                payload = object({
+                  repo = string
+                  url = string
+                  path = string
+                })
+              })
+              applications = object({
+                argocd-config = object({
+                  project = string
+                  repo = string
+                  url = string
+                  path = string
+                })
+                payload = object({
+                  repo = string
+                  url = string
+                  path = string
+                })
+              })
+            })
+        description: Config information regarding the gitops repo structure
+        moduleRef:
+          id: gitops
+          output: gitops_config
+      - name: git_credentials
+        type: |-
+          list(object({
+              repo = string
+              url = string
+              username = string
+              token = string
+            }))
+        description: The credentials for the gitops repo(s)
+        sensitive: true
+        moduleRef:
+          id: gitops
+          output: git_credentials
+      - name: namespace
+        type: string
+        description: The namespace where the application should be deployed
+        moduleRef:
+          id: namespace
+          output: name
+      - name: kubeseal_cert
+        type: string
+        description: The certificate/public key used to encrypt the sealed secrets
+        default: ''
+        moduleRef:
+          id: gitops
+          output: sealed_secrets_cert
+      - name: server_name
+        type: string
+        description: The name of the server
+        default: default
+        moduleRef:
+          id: gitops
+          output: server_name
+      - name: channel
+        type: string
+        description: The version of channel
+        default: v1.9
+      - name: storage_class
+        type: string
+        description: >-
+          The provisioned block or file storage class for all the PVCs required
+          by Cloud Pak for Security. When it is not specified, the default
+          storage class is used.
+        default: ''
+      - name: roks_auth
+        type: string
+        description: Whether ROKS authentication need to be enabled
+        default: 'false'
+      - name: entitlement_key
+        type: string
+        description: Entitlement key value
+        moduleRef:
+          id: catalogs
+          output: entitlement_key
+      - name: admin_user
+        type: string
+        description: >-
+          Short name or email-id of the user to be given administrator
+          privileges in the default account. Mandatory value while creating
+          cp4s-threat-management-instance
+      - name: catalog
+        type: string
+        description: The catalog source that should be used to deploy the operator
+        default: ibm-operator-catalog
+        moduleRef:
+          id: catalogs
+          output: catalog_ibmoperators
+      - name: catalog_namespace
+        type: string
+        description: The namespace where the catalog has been deployed
+        default: openshift-marketplace
+      - name: backup_storage_size
+        type: string
+        description: >-
+          The storage size for the backup and restore PVC. Must be 500Gi or
+          higher. If not specified, by default 500Gi is reserved.
+        default: ''
+      - name: backup_storage_class
+        type: string
+        description: >-
+          Storage class for the backup and restore pod. If this value is not
+          set, Cloud Pak for Security takes the value from the storageClass
+          parameter.
+        default: ''
+      - name: domain
+        type: string
+        description: >-
+          The fully qualified domain name (FQDN) created for Cloud Pak for
+          Security. If you don't specify an FQDN, it is generated as
+          cp4s.<cluster_ingress_subdomain>.
+        default: ''
+      - name: orchestration_automation_license
+        type: string
+        description: Orchestration & Automation license.
         default: ''
     version: v1.1.2
     outputs:
