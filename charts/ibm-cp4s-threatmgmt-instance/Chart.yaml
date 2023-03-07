@@ -1,6 +1,11 @@
 apiVersion: v2
 appVersion: 1.16.0
-description: A Helm chart for Kubernetes
-name: ibm-cp4sthreatmanagements-instance
+description: A Helm chart for Kubernetes to deploy the CP4S Threat Management instance
+name: ibm-cp4s-threatmgmt-instance
 type: application
-version: 0.1.0
+version: 1.0.0
+
+dependencies:
+  - name: ibm-cp4s-threatmgmt-instance
+    repository: https://charts.cloudnativetoolkit.dev/
+    version: 1.0.0
