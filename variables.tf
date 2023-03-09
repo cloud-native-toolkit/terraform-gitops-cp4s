@@ -83,7 +83,7 @@ variable "server_name" {
 variable "channel" {
   type = string
   description = "The version of channel"
-  default = "v1.9"
+  default = "v1.10"
 }
 
 variable "storage_class" {
