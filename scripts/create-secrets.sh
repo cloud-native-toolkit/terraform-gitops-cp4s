@@ -13,13 +13,10 @@ fi
 
 mkdir -p "${DEST_DIR}"/
 
-if [[ -z "${LICENSE}" ]] ||  [[ -z "${LICENSE_KEY}" ]]; then
-  echo "LICENSE and LICENSE_KEY are required as environment variables"
-  exit 1
+if [[ -n "${LICENSE}" ]] &&  [[ -n "${LICENSE_KEY}" ]]; then
+  kubectl create secret generic "${SECRET_NAME}" \
+    --from-literal="${LICENSE_KEY}=${LICENSE}" \
+    -n "${NAMESPACE}" \
+    --dry-run=client \
+    --output=yaml > "${DEST_DIR}/${SECRET_NAME}.yaml"
 fi
-
-kubectl create secret generic "${SECRET_NAME}" \
-  --from-literal="${LICENSE_KEY}=${LICENSE}" \
-  -n "${NAMESPACE}" \
-  --dry-run=client \
-  --output=yaml > "${DEST_DIR}/${SECRET_NAME}.yaml"
