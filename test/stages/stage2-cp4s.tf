@@ -10,5 +10,4 @@ module "cp4s" {
   entitlement_key = module.cp_catalogs.entitlement_key
   backup_storage_size = var.backup_storage_size
   admin_user = var.cp4s_admin_user
-  orchestration_automation_license = "sample_value"
 }
