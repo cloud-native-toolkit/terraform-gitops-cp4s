@@ -141,5 +141,5 @@ variable "domain" {
 variable "orchestration_automation_license" {
   type = string
   description = "Orchestration & Automation license."
-  default = "orchestration_automation_license"
+  default = ""
 }
