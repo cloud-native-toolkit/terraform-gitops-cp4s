@@ -14,10 +14,9 @@ fi
 mkdir -p "${DEST_DIR}"/
 
 if [[ -n "${LICENSE}" ]] &&  [[ -n "${LICENSE_KEY}" ]]; then
-
-kubectl create secret generic "${SECRET_NAME}" \
-  --from-literal="${LICENSE_KEY}=${LICENSE}" \
-  -n "${NAMESPACE}" \
-  --dry-run=client \
-  --output=yaml > "${DEST_DIR}/${SECRET_NAME}.yaml"
+  kubectl create secret generic "${SECRET_NAME}" \
+    --from-literal="${LICENSE_KEY}=${LICENSE}" \
+    -n "${NAMESPACE}" \
+    --dry-run=client \
+    --output=yaml > "${DEST_DIR}/${SECRET_NAME}.yaml"
 fi
